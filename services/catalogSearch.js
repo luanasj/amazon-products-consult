@@ -13,12 +13,8 @@ const amazonSearch = async (keyword) =>{
 
 }
 
-// amazonSearch("livro")
-
 const dataScraping = async (keyword)=>{
     const pageDocument = await amazonSearch(keyword)
-    
-    // console.log(pageDocument)
 
     const products = []
 
@@ -33,12 +29,6 @@ const dataScraping = async (keyword)=>{
                     img: listitem.querySelector("img")?.src
                 })
             }
-
-                // console.log("id",listitem.id)
-                // console.log("imgUrl",listitem.querySelector("img")?.src)
-                // console.log("title: ", listitem.querySelector('[data-cy="title-recipe"] h2 span')?.innerHTML)
-                // console.log("rating: ", listitem.querySelector('[data-cy="reviews-ratings-slot"] span')?.innerHTML)
-                // console.log("number-of-reviews: ", listitem.querySelector('[data-cy="reviews-block"] [data-component-type="s-client-side-analytics"] span')?.innerHTML)
 
         })
 

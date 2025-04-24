@@ -1,10 +1,42 @@
 import axios from "axios"
+import {JSDOM} from 'jsdom'
 
-const amazonSearch = (keyword) =>{ 
-    return axios.get(`https://www.amazon.com/s?k=${encodeURIComponent(keyword)}`)
-    .then(res=>console.log(res.data))
+const amazonSearch = async (keyword) =>{ 
+    const response = await axios.get(`https://www.amazon.com/s?k=${encodeURIComponent(keyword)}`,{
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept-Language': 'en-US,en;q=0.9'
+        }
+    })
+
+    return response.status == 200 ? response.data : undefined
+
 }
 
+// amazonSearch("livro")
 
-amazonSearch("planta")
+const dataScraping = async (keyword)=>{
+    const pageDocument = await amazonSearch(keyword)
+    
+    // console.log(pageDocument)
+
+    if(pageDocument){
+        const dom = new JSDOM(pageDocument)
+        dom.window.document.querySelectorAll('.s-result-list [role="listitem"]').forEach((listitem)=>{
+
+            // if(listitem){
+                console.log("id",listitem.id)
+                console.log("imgUrl",listitem.querySelector("img")?.src)
+                console.log("title: ", listitem.querySelector('[data-cy="title-recipe"] h2 span')?.innerHTML)
+                console.log("rating: ", listitem.querySelector('[data-cy="reviews-ratings-slot"] span')?.innerHTML)
+                console.log("number-of-reviews: ", listitem.querySelector('[data-cy="reviews-block"] [data-component-type="s-client-side-analytics"] span')?.innerHTML)
+
+            // }
+        })
+    }
+}
+
+dataScraping("livro")
+
+
 

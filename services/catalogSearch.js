@@ -37,7 +37,9 @@ const dataScraping = async (keyword)=>{
     return products
 }
 
-dataScraping("livro").then(res=>console.log(res))
+// dataScraping("livro").then(res=>console.log(res))
+
+export {dataScraping}
 
 
 

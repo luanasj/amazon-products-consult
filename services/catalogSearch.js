@@ -20,23 +20,34 @@ const dataScraping = async (keyword)=>{
     
     // console.log(pageDocument)
 
+    const products = []
+
     if(pageDocument){
         const dom = new JSDOM(pageDocument)
         dom.window.document.querySelectorAll('.s-result-list [role="listitem"]').forEach((listitem)=>{
+            if(listitem.id){
+                products.push({
+                    title:listitem.querySelector('[data-cy="title-recipe"] h2 span')?.innerHTML,
+                    rating: listitem.querySelector('[data-cy="reviews-ratings-slot"] span')?.innerHTML ?? "0",
+                    number_of_reviews: listitem.querySelector('[data-cy="reviews-block"] [data-component-type="s-client-side-analytics"] span')?.innerHTML ?? "0",
+                    img: listitem.querySelector("img")?.src
+                })
+            }
 
-            // if(listitem){
-                console.log("id",listitem.id)
-                console.log("imgUrl",listitem.querySelector("img")?.src)
-                console.log("title: ", listitem.querySelector('[data-cy="title-recipe"] h2 span')?.innerHTML)
-                console.log("rating: ", listitem.querySelector('[data-cy="reviews-ratings-slot"] span')?.innerHTML)
-                console.log("number-of-reviews: ", listitem.querySelector('[data-cy="reviews-block"] [data-component-type="s-client-side-analytics"] span')?.innerHTML)
+                // console.log("id",listitem.id)
+                // console.log("imgUrl",listitem.querySelector("img")?.src)
+                // console.log("title: ", listitem.querySelector('[data-cy="title-recipe"] h2 span')?.innerHTML)
+                // console.log("rating: ", listitem.querySelector('[data-cy="reviews-ratings-slot"] span')?.innerHTML)
+                // console.log("number-of-reviews: ", listitem.querySelector('[data-cy="reviews-block"] [data-component-type="s-client-side-analytics"] span')?.innerHTML)
 
-            // }
         })
+
     }
+
+    return products
 }
 
-dataScraping("livro")
+dataScraping("livro").then(res=>console.log(res))
 
 
 

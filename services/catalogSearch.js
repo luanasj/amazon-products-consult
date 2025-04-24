@@ -26,7 +26,7 @@ const dataScraping = async (keyword)=>{
                     title:listitem.querySelector('[data-cy="title-recipe"] h2 span')?.innerHTML,
                     rating: listitem.querySelector('[data-cy="reviews-ratings-slot"] span')?.innerHTML ?? "0",
                     number_of_reviews: listitem.querySelector('[data-cy="reviews-block"] [data-component-type="s-client-side-analytics"] span')?.innerHTML ?? "0",
-                    img: listitem.querySelector("img")?.src
+                    imgURL: listitem.querySelector("img")?.src
                 })
             }
 

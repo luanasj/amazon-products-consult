@@ -28,7 +28,7 @@ app.get('/api/scrape', async (req, res) => {
      if(keyword){
         const productsColection = await dataScraping(keyword)
 
-        productsColection.length ? res.status(200).json(productsColection) : res.status(201).json({ message: 'Faild to search'})
+        productsColection.length ? res.status(200).json(productsColection) : res.status(201).json({ message: 'Failed to search'})
      } else{
         res.status(400).json({message: 'Bad Request: information missing.'})
      }

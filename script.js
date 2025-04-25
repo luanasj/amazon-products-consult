@@ -77,41 +77,26 @@ searchForm.addEventListener('submit', async (e) => {
     searchButton.disabled = true;
     showLoading();
 
-//   try {
+
     const response = await fetch(`http://127.0.0.1:4527/api/scrape?keyword=${encodeURIComponent(keyword)}`);
 
-    // console.log(response)
-    // if (!response.ok) throw new Error('Failed to fetch products');
-    if(response.ok) {
+    if(response.status == 200) {
         const products = await response.json();
+        
         const productsCards = products.map(createProductCard).join('');
         productGrid.innerHTML = productsCards;
         hideLoading();
         productGrid.classList.remove('hidden');
         noResults.classList.add('hidden');
-        console.log(products)
+    } else {
+        const errorInformation = await response.json()
+        hideLoading();
+        productGrid.classList.add('hidden');
+        noResults.classList.remove('hidden');
+        showToast('No products found', (errorInformation?.message ?? "Request failed." ) , 'destructive');
+
     }
 
-    
-    
+    searchButton.disabled = false;
 
-    
-//     if (products.length === 0) {
-//       productGrid.classList.add('hidden');
-//       noResults.classList.remove('hidden');
-//       showToast('No products found', 'Try a different search term', 'destructive');
-//     } else {
-//       
-//     }
-//   } catch (error) {
-//     hideLoading();
-//     productGrid.classList.add('hidden');
-//     noResults.classList.remove('hidden');
-//     showToast('Error', 'Failed to fetch products. Please try again.', 'destructive');
-//   } finally {
-//     searchButton.disabled = false;
-//   }
 });
-
-// Initialize skeletons
-createSkeletons();

@@ -1,4 +1,5 @@
 import express from 'express'
+import path from 'path'
 import { dataScraping } from '../services/catalogSearch'
 
 const app = express()
@@ -9,7 +10,13 @@ app.use((req, res, next) => {
    res.header("Access-Control-Allow-Methods", "GET");
    res.header("Access-Control-Allow-Headers", "Content-Type");
    next();
- });
+});
+
+app.use(express.static(path.join(__dirname, '../app')));
+
+app.get('/', (req,res)=>{
+   res.sendFile(path.join(__dirname, '../app/index.html'));
+})
 
 app.get('/api/scrape', async (req, res) => {
     const {keyword} = req.query

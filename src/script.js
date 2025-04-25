@@ -67,6 +67,15 @@ toastClose.addEventListener('click', () => {
   toast.classList.add('hidden');
 });
 
+const badRequestHandler = (title,description)=>{
+  hideLoading();
+        productGrid.classList.add('hidden');
+        noResults.classList.remove('hidden');
+        showToast(title, description , 'destructive');
+}
+
+
+
 searchForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -77,8 +86,12 @@ searchForm.addEventListener('submit', async (e) => {
     searchButton.disabled = true;
     showLoading();
 
+    const response = await fetch(`http://127.0.0.1:4527/api/scrape?keyword=${encodeURIComponent(keyword)}`)
+    .catch(() => 
+        badRequestHandler("Bad Request.","Server Error.")
+    );
 
-    const response = await fetch(`http://127.0.0.1:4527/api/scrape?keyword=${encodeURIComponent(keyword)}`);
+    if (!response) return searchButton.disabled = false;
 
     if(response.status == 200) {
         const products = await response.json();
@@ -90,11 +103,7 @@ searchForm.addEventListener('submit', async (e) => {
         noResults.classList.add('hidden');
     } else {
         const errorInformation = await response.json()
-        hideLoading();
-        productGrid.classList.add('hidden');
-        noResults.classList.remove('hidden');
-        showToast('No products found', (errorInformation?.message ?? "Request failed." ) , 'destructive');
-
+        badRequestHandler('No products found', (errorInformation?.message ?? "Request failed." ))
     }
 
     searchButton.disabled = false;

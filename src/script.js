@@ -1,4 +1,4 @@
-
+//Connects to DOM elements to manipulate them
 const searchForm = document.getElementById('searchForm');
 const searchInput = document.getElementById('searchInput');
 const searchButton = document.getElementById('searchButton');
@@ -10,6 +10,8 @@ const toastTitle = toast.querySelector('.toast-title');
 const toastDescription = toast.querySelector('.toast-description');
 const toastClose = toast.querySelector('.toast-close');
 
+
+//Create fake cards to loading animation
 function createSkeletons() {
   loadingGrid.innerHTML = Array(8)
     .fill(0)
@@ -25,6 +27,7 @@ function createSkeletons() {
     .join('');
 }
 
+//create real products cards based on product literal objects
 function createProductCard(product) {
   return `
     <div class="product-card">
@@ -40,6 +43,8 @@ function createProductCard(product) {
   `;
 }
 
+
+//Shows loading animation with the skeletons
 function showLoading() {
   createSkeletons();
   loadingGrid.classList.remove('hidden');
@@ -47,10 +52,12 @@ function showLoading() {
   noResults.classList.add('hidden');
 }
 
+//Hides loading animation
 function hideLoading() {
   loadingGrid.classList.add('hidden');
 }
 
+//Shows flash message to request errors
 function showToast(title, description, variant = 'default') {
   toastTitle.textContent = title;
   toastDescription.textContent = description;
@@ -63,10 +70,14 @@ function showToast(title, description, variant = 'default') {
   }, 5000);
 }
 
+
+//Hides flash messages
 toastClose.addEventListener('click', () => {
   toast.classList.add('hidden');
 });
 
+
+//Handle unsuccessful requests to backend
 const badRequestHandler = (title,description)=>{
   hideLoading();
         productGrid.classList.add('hidden');
@@ -74,8 +85,8 @@ const badRequestHandler = (title,description)=>{
         showToast(title, description , 'destructive');
 }
 
-
-
+//Add an 'submit' event listener do search form / button
+//Add a callback function to request research to backend and create product cards on demand
 searchForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 

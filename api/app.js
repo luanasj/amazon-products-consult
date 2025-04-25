@@ -4,7 +4,7 @@ import cors from 'cors'
 import { dataScraping } from '../services/catalogSearch'
 
 const app = express()
-const port = 4527
+const port = 3000
 
 app.use(cors());
 
@@ -20,7 +20,7 @@ app.get('/api/scrape', async (req, res) => {
      if(keyword){
         const productsColection = await dataScraping(keyword)
 
-        productsColection.length ? res.status(200).json(productsColection) : res.status(201).json({ message: 'No products found for the given keyword.'})
+        productsColection.length ? res.status(200).json(productsColection) : res.status(201).json({ message: 'Faild to search'})
      } else{
         res.status(400).json({message: 'Bad Request: information missing.'})
      }

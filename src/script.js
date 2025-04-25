@@ -86,7 +86,7 @@ searchForm.addEventListener('submit', async (e) => {
     searchButton.disabled = true;
     showLoading();
 
-    const response = await fetch(`http://127.0.0.1:4527/api/scrape?keyword=${encodeURIComponent(keyword)}`)
+    const response = await fetch(`http://127.0.0.1:3000/api/scrape?keyword=${encodeURIComponent(keyword)}`)
     .catch(() => 
         badRequestHandler("Bad Request.","Server Error.")
     );

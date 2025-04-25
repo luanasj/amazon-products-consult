@@ -1,23 +1,17 @@
 import express from 'express'
 import path from 'path'
+import cors from 'cors'
 import { dataScraping } from '../services/catalogSearch'
 
 const app = express()
 const port = 4527
 
-app.use((req, res, next) => {
-   res.header("Access-Control-Allow-Origin", "*");
-   res.header("Access-Control-Allow-Methods", "GET");
-   res.header("Access-Control-Allow-Headers", "Content-Type");
-   next();
-});
+app.use(cors());
 
-app.use(express.static(path.join(__dirname, '../src')));
-
-app.use(express.static(path.join(__dirname, '../index.html')));
+app.use(express.static(path.join(__dirname, '../dist')));
 
 app.get('/', (req,res)=>{
-   res.sendFile(path.join(__dirname, '../index.html'));
+   res.sendFile(path.join(__dirname, '../dist/index.html'));
 })
 
 app.get('/api/scrape', async (req, res) => {

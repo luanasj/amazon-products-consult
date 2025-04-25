@@ -128,9 +128,12 @@
   }
   
   .product-image {
-    width: 100%;
+    width: auto;
+    display: block;
+    margin: auto;
     aspect-ratio: 1;
     object-fit: cover;
+
   }
   
   .product-content {

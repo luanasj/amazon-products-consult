@@ -68,40 +68,35 @@ toastClose.addEventListener('click', () => {
 });
 
 searchForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const keyword = searchInput.value.trim();
+    e.preventDefault();
 
-  if (!keyword) return;
+    const keyword = searchInput.value.trim();
 
-  searchButton.disabled = true;
-  showLoading();
+    if (!keyword) return;
 
-  try {
-    const response = await fetch(`/api/scrape?keyword=${encodeURIComponent(keyword)}`);
-    if (!response.ok) throw new Error('Failed to fetch products');
-    
-    const products = await response.json();
-    
-    hideLoading();
-    
-    if (products.length === 0) {
-      productGrid.classList.add('hidden');
-      noResults.classList.remove('hidden');
-      showToast('No products found', 'Try a different search term', 'destructive');
+    searchButton.disabled = true;
+    showLoading();
+
+
+    const response = await fetch(`http://127.0.0.1:4527/api/scrape?keyword=${encodeURIComponent(keyword)}`);
+
+    if(response.status == 200) {
+        const products = await response.json();
+        
+        const productsCards = products.map(createProductCard).join('');
+        productGrid.innerHTML = productsCards;
+        hideLoading();
+        productGrid.classList.remove('hidden');
+        noResults.classList.add('hidden');
     } else {
-      productGrid.innerHTML = products.map(createProductCard).join('');
-      productGrid.classList.remove('hidden');
-      noResults.classList.add('hidden');
-    }
-  } catch (error) {
-    hideLoading();
-    productGrid.classList.add('hidden');
-    noResults.classList.remove('hidden');
-    showToast('Error', 'Failed to fetch products. Please try again.', 'destructive');
-  } finally {
-    searchButton.disabled = false;
-  }
-});
+        const errorInformation = await response.json()
+        hideLoading();
+        productGrid.classList.add('hidden');
+        noResults.classList.remove('hidden');
+        showToast('No products found', (errorInformation?.message ?? "Request failed." ) , 'destructive');
 
-// Initialize skeletons
-createSkeletons();
+    }
+
+    searchButton.disabled = false;
+
+});
